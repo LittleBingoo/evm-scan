@@ -1,0 +1,12 @@
+const setting = {
+    // Web3
+    WEB3_PROVIDER_URL: 'https://jsonrpc.maiziqianbao.net/',
+    // MongoDB
+    MONGODB_URL: 'mongodb://localhost:27017/',
+    MONGODB_DB: 'evm',
+
+    // EVM
+    BLOCK_START_AT: 1252435
+}
+
+module.exports = setting;
