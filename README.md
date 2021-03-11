@@ -29,6 +29,6 @@ Use sequelize
 
 
 ### Usage
--migrate: `node_modules/.bin/sequelize db:migrate`
--run porter: `node porter.js`
--run api web service: `node api/index.js`
+- migrate: `node_modules/.bin/sequelize db:migrate`
+- run porter: `node porter.js`
+- run api web service: `node api/index.js`
