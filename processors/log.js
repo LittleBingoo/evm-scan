@@ -3,13 +3,13 @@ class LogData {
     log = {}
 
     constructor(log) {
-        this.log.address = log.address;
+        this.log.address = log.address ? log.address.toLowerCase() : null;
         this.log.topics = log.topics;
         this.log.data = log.data;
         this.log.block_number = log.blockNumber;
-        this.log.transaction_hash = log.transactionHash;
+        this.log.transaction_hash = log.transactionHash ? log.transactionHash.toLowerCase() : null;
         this.log.transaction_index = log.transactionIndex;
-        this.log.block_hash = log.blockHash;
+        this.log.block_hash = log.blockHash ? log.blockHash.toLowerCase() : null;
         this.log.log_index = log.logIndex;
         this.log.removed = log.removed;
         this.log.id = log.id;

@@ -7,15 +7,15 @@ class TransactionData {
     receipt = {}
 
     constructor(transaction) {
-        this.transaction.block_hash = transaction.blockHash;
+        this.transaction.block_hash = transaction.blockHash.toLowerCase();
         this.transaction.block_number = transaction.blockNumber;
-        this.transaction.from = transaction.from;
+        this.transaction.from = transaction.from.toLowerCase();
         this.transaction.gas = transaction.gas;
         this.transaction.gas_price = transaction.gasPrice;
-        this.transaction.hash = transaction.hash;
+        this.transaction.hash = transaction.hash.toLowerCase();
         this.transaction.input = transaction.input;
         this.transaction.nonce = transaction.nonce;
-        this.transaction.to = transaction.to;
+        this.transaction.to = transaction.to ? transaction.to.toLowerCase() : null;
         this.transaction.transaction_index = transaction.transactionIndex;
         this.transaction.value = transaction.value;
         this.transaction.v = transaction.v;
@@ -24,17 +24,17 @@ class TransactionData {
     }
 
     attachReceipt(receipt) {
-        this.receipt.block_hash = receipt.blockHash;
+        this.receipt.block_hash = receipt.blockHash.toLowerCase();
         this.receipt.block_number = receipt.blockNumber;
-        this.receipt.contract_address = receipt.contractAddress;
+        this.receipt.contract_address = receipt.contractAddress ? receipt.contractAddress.toLowerCase() : null;
         this.receipt.cumulative_gas_used = receipt.cumulativeGasUsed;
-        this.receipt.from = receipt.from;
+        this.receipt.from = receipt.from.toLowerCase();
         this.receipt.gas_used = receipt.gasUsed;
         this.receipt.logs = receipt.logs;
         this.receipt.logs_bloom = receipt.logsBloom;
         this.receipt.status = receipt.status;
-        this.receipt.to = receipt.to;
-        this.receipt.transaction_hash = receipt.transactionHash;
+        this.receipt.to = receipt.to ? receipt.to.toLowerCase() : null;
+        this.receipt.transaction_hash = receipt.transactionHash.toLowerCase();
         this.receipt.transaction_index = receipt.transactionIndex;
     }
 

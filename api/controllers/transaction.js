@@ -42,7 +42,7 @@ async function index(req, res, next) {
 
 
 async function getByHash(req, res, next) {
-    const hash = req.params.hash;
+    const hash = req.params.hash.toLowerCase();
     let transaction = await Transaction.findOne({where: {hash: hash}});
     if (transaction === null) {
         return res.json({
@@ -58,7 +58,7 @@ async function getByHash(req, res, next) {
 }
 
 async function getByAddress(req, res, next) {
-    const address = req.params.address;
+    const address = req.params.address.toLowerCase();
     const limit = parseInt(req.query.limit);
     const offset = parseInt(req.query.offset);
     const orderby = parseInt(req.query.orderby);

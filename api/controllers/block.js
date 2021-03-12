@@ -59,7 +59,7 @@ async function getByNumber(req, res, next) {
 }
 
 async function getByHash(req, res, next) {
-    const hash = req.params.hash;
+    const hash = req.params.hash.toLowerCase();
     let block = await Block.findOne({where: {hash: hash}});
     if (block === null) {
         return res.json({

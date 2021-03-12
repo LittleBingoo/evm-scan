@@ -75,14 +75,14 @@ function uniqueArray(arr){
                         let createdContracts = [];
                         let updatedAddressTokens = [];
 
-                        updatedAddresses.push(block.miner);
+                        updatedAddresses.push(block.miner.toLowerCase());
 
 
                         // Uncles
                         for (let uncleIndex in block.uncles) {
                             await BlockSecondDegreeRelation.create({
-                                nephew_hash: block.hash,
-                                uncle_hash: block.uncles[uncleIndex],
+                                nephew_hash: block.hash.toLowerCase(),
+                                uncle_hash: block.uncles[uncleIndex].toLowerCase(),
                                 index: uncleIndex,
                                 uncle_fetched_at: block.timestamp
                             }, {transaction: t});
@@ -101,7 +101,7 @@ function uniqueArray(arr){
 
                             await Transaction.create(transactionData.serialize(), {transaction: t});
 
-                            updatedAddresses.push(transaction.from);
+                            updatedAddresses.push(transaction.from.toLowerCase());
 
                             // Contact creation tx, Event logs of internal transaction
                             if (transaction.input && transaction.input.length > 2) {
@@ -113,8 +113,8 @@ function uniqueArray(arr){
                                     //     address_hash: contractAddress
                                     // }, {transaction: t});
 
-                                    createdContracts.push(contractAddress);
-                                    updatedAddresses.push(contractAddress);
+                                    createdContracts.push(contractAddress.toLowerCase());
+                                    updatedAddresses.push(contractAddress.toLowerCase());
 
 
                                     // // Try Erc20
@@ -137,7 +137,7 @@ function uniqueArray(arr){
                                 }
                             } else {
                                 if (transaction.to !== null) {
-                                    updatedAddresses.push(transaction.to);
+                                    updatedAddresses.push(transaction.to.toLowerCase());
                                 }
                             }
 
@@ -162,24 +162,24 @@ function uniqueArray(arr){
 
                                             // transfer method
                                             await TokenTransfer.create({
-                                                transaction_hash: transaction.hash,
+                                                transaction_hash: transaction.hash.toLowerCase(),
                                                 log_index: log.log_index,
-                                                block_hash: block.hash,
-                                                from_address_hash: from,
-                                                to_address_hash: to,
+                                                block_hash: block.hash.toLowerCase(),
+                                                from_address_hash: from.toLowerCase(),
+                                                to_address_hash: to.toLowerCase(),
                                                 amount: new BigNumber(log.data, 16),
                                                 token_id: log.topics[3] ? new BigNumber(log.topics[3], 16) : 0, //ERC721
-                                                token_contract_address_hash: log.address,
+                                                token_contract_address_hash: log.address.toLowerCase(),
                                                 block_number: block.number
                                             }, {transaction: t});
 
-                                            if (!updatedAddressTokens[log.address]) {
-                                                updatedAddressTokens[log.address] = [];
+                                            if (!updatedAddressTokens[log.address.toLowerCase()]) {
+                                                updatedAddressTokens[log.address.toLowerCase()] = [];
                                             }
-                                            updatedAddressTokens[log.address].push(from);
-                                            updatedAddressTokens[log.address].push(to);
-                                            updatedAddresses.push(from);
-                                            updatedAddresses.push(to);
+                                            updatedAddressTokens[log.address.toLowerCase()].push(from.toLowerCase());
+                                            updatedAddressTokens[log.address.toLowerCase()].push(to.toLowerCase());
+                                            updatedAddresses.push(from.toLowerCase());
+                                            updatedAddresses.push(to.toLowerCase());
                                         }
                                     }
                                 }

@@ -42,7 +42,7 @@ async function index(req, res, next) {
 
 
 async function getByHash(req, res, next) {
-    const hash = req.params.hash;
+    const hash = req.params.hash.toLowerCase();
     let address = await Address.findOne({where: {hash: hash}});
     if (address === null) {
         address = Address.build({

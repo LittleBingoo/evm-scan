@@ -4,7 +4,7 @@ const TokenTransfer = DB.TokenTransfer;
 const TokenTransferResource = require('../resources/tokenTransfer');
 
 async function getByHash(req, res, next) {
-    const hash = req.params.hash;
+    const hash = req.params.hash.toLowerCase();
     const limit = parseInt(req.query.limit);
     const offset = parseInt(req.query.offset);
     const orderby = parseInt(req.query.orderby);
@@ -39,7 +39,7 @@ async function getByHash(req, res, next) {
 
 
 async function getByAddress(req, res, next) {
-    const address = req.params.address;
+    const address = req.params.address.toLowerCase();
     const limit = parseInt(req.query.limit);
     const offset = parseInt(req.query.offset);
     const orderby = parseInt(req.query.orderby);
@@ -95,8 +95,8 @@ async function getByAddress(req, res, next) {
 }
 
 async function getByHashAndAddress(req, res, next) {
-    const hash = req.params.hash;
-    const address = req.params.address;
+    const hash = req.params.hash.toLowerCase();
+    const address = req.params.address.toLowerCase();
     const limit = parseInt(req.query.limit);
     const offset = parseInt(req.query.offset);
     const orderby = parseInt(req.query.orderby);

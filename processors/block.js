@@ -10,12 +10,12 @@ class BlockData {
         this.block.extra_data = block.extraData;
         this.block.gas_limit = block.gasLimit;
         this.block.gas_used = block.gasUsed;
-        this.block.hash = block.hash;
+        this.block.hash = block.hash.toLowerCase();
         this.block.logs_bloom = block.logsBloom;
-        this.block.miner = block.miner;
+        this.block.miner = block.miner.toLowerCase();
         this.block.mix_hash = block.mixHash;
         this.block.nonce = block.nonce;
-        this.block.parent_hash = block.parentHash;
+        this.block.parent_hash = block.parentHash.toLowerCase();
         this.block.receipts_root = block.receiptsRoot;
         this.block.sha3_uncles = block.sha3Uncles;
         this.block.size = block.size;

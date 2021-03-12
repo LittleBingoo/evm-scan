@@ -16,8 +16,8 @@ class ContractData {
 
     serialize() {
         return {
-            address: this.contract_address,
-            creator: this.contract_info.creator,
+            address: this.contract_address.toLowerCase(),
+            creator: this.contract_info.creator.toLowerCase(),
             name: this.contract_info.name,
             code: this.contract_code,
             abi: this.contract_abi,
