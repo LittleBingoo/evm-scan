@@ -2,6 +2,8 @@ const DB = require('../../models/index');
 const BigNumber = require('bignumber.js');
 const Block = DB.Block;
 const Log = DB.Log;
+const TokenTransfer = DB.TokenTransfer;
+const Token = DB.Token;
 
 async function serialize(transaction, isBrief = false) {
 
@@ -47,6 +49,28 @@ async function serialize(transaction, isBrief = false) {
             })
         }
 
+        // token transfers
+        let tokenTransfers = await TokenTransfer.findAll({
+            where: {transaction_hash: transaction.hash}
+        });
+
+        tokenTransfersData = [];
+        for (let tokenTransfer of tokenTransfers) {
+            let token = await Token.findOne({where: {contract_address_hash: tokenTransfer.token_contract_address_hash}});
+            tokenTransfersData.push({
+                from: tokenTransfer.from_address_hash,
+                to: tokenTransfer.to_address_hash,
+                amount: tokenTransfer.amount,
+                token_id: tokenTransfer.token_id,
+                token: {
+                    contract_address: tokenTransfer.token_contract_address_hash,
+                    name: token?.name,
+                    symbol: token?.symbol,
+                    decimals: token?.decimals
+                }
+            });
+        }
+
         return {
             hash: transaction.hash,
             from: transaction.from_address_hash,
@@ -69,7 +93,8 @@ async function serialize(transaction, isBrief = false) {
                 hash: transaction.block_hash,
                 timestamp: block.timestamp
             },
-            logs: logData
+            logs: logData,
+            token_transfers: tokenTransfersData
         }
     }
 }
