@@ -204,15 +204,30 @@ function uniqueArray(arr){
                             await addressModel.save({transaction: t});
                         }
 
-                        // Token trace
-                        for (let contractAddress in updatedAddressTokens) {
+                        // Add contract
+                        createdContracts = uniqueArray(createdContracts)
 
-                            // isNewSmartContract
+                        for (let smartContract of createdContracts) {
                             let smartContract = await Token.findOne({where: {contract_address_hash: contractAddress}});
                             if (smartContract == null) {
                                 let smartContract = await SmartContract.create({
                                     address_hash: contractAddress
                                 }, {transaction: t});
+                            }
+                        }
+
+
+                        // Token trace
+                        for (let contractAddress in updatedAddressTokens) {
+
+                            // isNewSmartContract
+                            if (createdContracts.indexOf(contractAddress) == -1) {
+                                let smartContract = await SmartContract.findOne({where: {contract_address_hash: contractAddress}});
+                                if (smartContract == null) {
+                                    let smartContract = await SmartContract.create({
+                                        address_hash: contractAddress
+                                    }, {transaction: t});
+                                }
                             }
 
                             let contractProcessor = new ContractProcessor({contract_address: contractAddress});
