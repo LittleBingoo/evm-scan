@@ -24,6 +24,10 @@ router.get('/address/:hash', AddressController.getByHash);
 router.get('/addresses/', AddressController.index);
 
 
+const TokenController = require('../controllers/token.js');
+router.get('/token/:contract', TokenController.getByContract);
+router.get('/tokens/', TokenController.index);
+
 
 const TokenTransferController = require('../controllers/tokenTransfer.js');
 router.get('/token_transfers/address/:address', TokenTransferController.getByAddress);

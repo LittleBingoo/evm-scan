@@ -138,6 +138,41 @@ async function getByHashAndAddress(req, res, next) {
 }
 
 
+async function getByContract(req, res, next) {
+    const contract = req.params.contract.toLowerCase();
+    const limit = parseInt(req.query.limit);
+    const offset = parseInt(req.query.offset);
+    const orderby = parseInt(req.query.orderby);
+    const erc721 = parseInt(req.query.erc721);
+    let order = 'DESC'
+    if (orderby == 1) {
+        order = 'ASC'
+    }
+
+    if (erc721 == 1) {
+        var condition = {
+            where: {
+                token_id: {[Sequelize.Op.ne]: 0},
+                [Sequelize.Op.or]: [{ from_address_hash: address }, { to_address_hash: address }],
+            },
+            order: [['block_number', order]],
+            offset: offset ? offset : 0,
+            limit: limit && limit <= 200 ? limit : 50
+        }
+    } else {
+        var condition = {
+            where: {
+                token_id: 0,
+                [Sequelize.Op.or]: [{ from_address_hash: address }, { to_address_hash: address }],
+            },
+            order: [['block_number', order]],
+            offset: offset ? offset : 0,
+            limit: limit && limit <= 200 ? limit : 50
+        }
+    }
+}
+
+
 module.exports = {
     getByHash,
     getByAddress,
