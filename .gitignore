@@ -1,4 +1,5 @@
 node_modules/
+solc-repo/
 
 setting.js
 config/config.json

@@ -222,7 +222,7 @@ function uniqueArray(arr){
 
                             // isNewSmartContract
                             if (createdContracts.indexOf(contractAddress) == -1) {
-                                let smartContract = await SmartContract.findOne({where: {contract_address_hash: contractAddress}});
+                                let smartContract = await SmartContract.findOne({where: {address_hash: contractAddress}});
                                 if (smartContract == null) {
                                     let smartContract = await SmartContract.create({
                                         address_hash: contractAddress

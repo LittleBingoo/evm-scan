@@ -34,5 +34,12 @@ router.get('/token_transfers/address/:address', TokenTransferController.getByAdd
 router.get('/token_transfers/:hash', TokenTransferController.getByHash);
 router.get('/token_transfers/:hash/address/:address', TokenTransferController.getByHashAndAddress);
 
+const ContractController = require('../controllers/contract.js');
+router.get('/contract/:hash', ContractController.getByHash);
+
+const CompilerController = require('../controllers/compiler.js');
+router.post('/compiler', CompilerController.index);
+
+
 
 module.exports = router;
