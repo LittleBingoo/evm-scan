@@ -2,6 +2,7 @@ const Sequelize = require('sequelize');
 const DB = require('../../models/index');
 const Token = DB.Token;
 const TokenResource = require('../resources/token');
+const TokenDetailResource = require('../resources/tokenDetail');
 
 async function index(req, res, next) {
     const limit = parseInt(req.query.limit);
@@ -52,7 +53,7 @@ async function getByContract(req, res, next) {
             data: null
         })
     }
-    let tokenData = await TokenResource.serialize(token);
+    let tokenData = await TokenDetailResource.serialize(token);
     res.json({
         code: 0,
         data: tokenData
