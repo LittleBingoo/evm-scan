@@ -113,7 +113,7 @@ async function index(req, res, next) {
     contract.name = data.name;
     contract.compiler_version = data.compilerVersion;
     contract.optimization = data.optimization;
-    contract.contract_source_code = data.bytecode;
+    contract.contract_source_code = data.sourceCode;
     contract.abi = data.abi;
     contract.save();
 
