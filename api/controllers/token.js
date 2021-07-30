@@ -61,7 +61,43 @@ async function getByContract(req, res, next) {
 }
 
 
+async function search(req, res, next) {
+    let keyword = req.params.keyword.toLowerCase();
+    keyword = '%' + keyword + '%';
+
+    let tokens = await Token.findAll({
+        where: {
+            [Sequelize.Op.or]: [
+                {
+                    name: {
+                        [Sequelize.Op.iLike]: keyword
+                    }
+                },
+                {
+                    symbol: {
+                        [Sequelize.Op.iLike]: keyword
+                    }
+                },
+            ]
+        }
+    });
+
+    let data = [];
+
+    for (let token of tokens) {
+        let tokenData = await TokenResource.serialize(token, true);
+        data.push(tokenData);
+    }
+
+    res.json({
+        code: 0,
+        data: data,
+    });
+}
+
+
 module.exports = {
     index,
-    getByContract
+    getByContract,
+    search
 }

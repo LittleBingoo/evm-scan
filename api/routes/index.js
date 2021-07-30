@@ -27,6 +27,7 @@ router.get('/addresses/', AddressController.index);
 const TokenController = require('../controllers/token.js');
 router.get('/token/:contract', TokenController.getByContract);
 router.get('/tokens/', TokenController.index);
+router.get('/tokens/search/:keyword', TokenController.search);
 
 
 const TokenTransferController = require('../controllers/tokenTransfer.js');
