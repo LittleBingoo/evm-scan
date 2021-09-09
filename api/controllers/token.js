@@ -15,6 +15,7 @@ async function index(req, res, next) {
     }
 
     let condition = {
+        where: {cataloged: 1},
         order: [['holder_count', order], ['created_at', 'ASC']],
         offset: offset ? offset : 0,
         limit: limit && limit <= 50 ? limit : 50
@@ -96,8 +97,48 @@ async function search(req, res, next) {
 }
 
 
+
+async function saveInformation(req, res, next) {
+
+    const { contract_address } = req.body;
+    const { name } = req.body;
+    const { symbol } = req.body;
+    const { total_supply } = req.body;
+    const { decimals } = req.body;
+    const { icon } = req.body;
+
+    let token = await Token.findOne({where: {contract_address_hash: contract_address}});
+
+    if (token == null) {
+        await Token.create({
+            contract_address_hash: contract_address,
+            name: name,
+            symbol: symbol,
+            total_supply: total_supply,
+            decimals: decimals,
+            icon: icon,
+            cataloged: 0,
+        });
+    } else if(token.icon == null) {
+        token.icon = icon;
+        await token.save();
+    } else {
+        return res.json({
+            code: 400,
+            data: null
+        })
+    }
+
+    res.json({
+        code: 0,
+        data: null,
+    });
+}
+
+
 module.exports = {
     index,
     getByContract,
-    search
+    search,
+    saveInformation
 }

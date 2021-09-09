@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       type: { type: DataTypes.STRING },
       cataloged: {type: DataTypes.BOOLEAN},
       holder_count: { type: DataTypes.INTEGER },
+      icon: { type: DataTypes.STRING },
       created_at: { type: DataTypes.DATE },
       updated_at: { type: DataTypes.DATE },
   }, {

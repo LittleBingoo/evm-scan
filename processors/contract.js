@@ -70,12 +70,12 @@ class ContractProcessor {
     }
 
     async erc20CompatibleTest(web3Contract) {
-        let [name, totalSupply, decimals, symbol, balance] = await Promise.all([
+        let [name, totalSupply, decimals, symbol] = await Promise.all([
             web3Contract.methods.name().call(),
             web3Contract.methods.totalSupply().call(),
             web3Contract.methods.decimals().call(),
-            web3Contract.methods.symbol().call(),
-            web3Contract.methods.balanceOf(this.contractData.contract_address).call()
+            web3Contract.methods.symbol().call()
+            // web3Contract.methods.balanceOf(this.contractData.contract_address).call()
         ]);
 
         return {

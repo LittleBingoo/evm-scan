@@ -198,16 +198,21 @@ function uniqueArray(arr){
                             }
 
                             // get balance
-                            let balance = await web3.eth.getBalance(address);
-                            addressModel.fetched_coin_balance = balance;
-                            addressModel.fetched_coin_balance_block_number = block.number;
+                            try {
+                                let balance = await web3.eth.getBalance(address);
+                                addressModel.fetched_coin_balance = balance;
+                                addressModel.fetched_coin_balance_block_number = block.number;
+                            } catch (error) {
+                                console.log(error);
+                            }
+
                             await addressModel.save({transaction: t});
                         }
 
                         // Add contract
                         createdContracts = uniqueArray(createdContracts)
 
-                        for (let smartContract of createdContracts) {
+                        for (let contractAddress of createdContracts) {
                             let smartContract = await Token.findOne({where: {contract_address_hash: contractAddress}});
                             if (smartContract == null) {
                                 let smartContract = await SmartContract.create({
@@ -236,19 +241,29 @@ function uniqueArray(arr){
                             // isNewToken
                             let token = await Token.findOne({where: {contract_address_hash: contractAddress}});
 
-                            if (token == null) {
+                            if (token == null || token.cataloged == 0) {
                                 // Try Erc20
                                 if (await contractProcessor.isErc20Compatible(web3)) {
                                     let web3Contract = contractProcessor.getErc20Web3Contract(web3);
                                     try {
                                         let tokenData = await contractProcessor.erc20CompatibleTest(web3Contract);
-                                        await Token.create({
-                                            contract_address_hash: contractAddress,
-                                            name: tokenData.name,
-                                            symbol: tokenData.symbol,
-                                            total_supply: tokenData.totalSupply,
-                                            decimals: tokenData.decimals,
-                                        }, {transaction: t});
+                                        if (token == null) {
+                                            await Token.create({
+                                                contract_address_hash: contractAddress,
+                                                name: tokenData.name,
+                                                symbol: tokenData.symbol,
+                                                total_supply: tokenData.totalSupply,
+                                                decimals: tokenData.decimals,
+                                                cataloged: 1,
+                                            }, {transaction: t});
+                                        } else {
+                                            token.name = tokenData.name;
+                                            token.symbol = tokenData.symbol;
+                                            token.total_supply = tokenData.total_supply;
+                                            token.decimals = tokenData.decimals;
+                                            token.cataloged = 1;
+                                            await token.save({transaction: t});
+                                        }
                                     } catch(err) {
                                         console.log(err)
                                     }
@@ -261,22 +276,26 @@ function uniqueArray(arr){
 
                             for (let address of updatedAddressTokens[contractAddress]) {
 
-                                let balance = await web3Contract.methods.balanceOf(address).call();
+                                try {
+                                    let balance = await web3Contract.methods.balanceOf(address).call();
 
-                                let addressTokenBalance = await AddressTokenBalance.findOne({where: {address_hash: address, token_contract_address_hash: contractAddress}});
+                                    let addressTokenBalance = await AddressTokenBalance.findOne({where: {address_hash: address, token_contract_address_hash: contractAddress}});
 
-                                if (addressTokenBalance === null) {
-                                    addressTokenBalance = await AddressTokenBalance.create({
-                                        address_hash: address,
-                                        token_contract_address_hash: contractAddress,
-                                        block_number: 0
-                                    }, {transaction: t});
+                                    if (addressTokenBalance === null) {
+                                        addressTokenBalance = await AddressTokenBalance.create({
+                                            address_hash: address,
+                                            token_contract_address_hash: contractAddress,
+                                            block_number: 0
+                                        }, {transaction: t});
+                                    }
+
+                                    addressTokenBalance.value = balance;
+                                    addressTokenBalance.value_fetched_at = Math.round(new Date().getTime()/1000);
+                                    addressTokenBalance.block_number = block.number;
+                                    await addressTokenBalance.save({transaction: t});
+                                } catch(error) {
+                                    console.log(error);
                                 }
-
-                                addressTokenBalance.value = balance;
-                                addressTokenBalance.value_fetched_at = Math.round(new Date().getTime()/1000);
-                                addressTokenBalance.block_number = block.number;
-                                await addressTokenBalance.save({transaction: t});
                             }
                         }
 

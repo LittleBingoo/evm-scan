@@ -194,6 +194,7 @@ module.exports = {
       type: { type: Sequelize.STRING },
       cataloged: {type: Sequelize.BOOLEAN},
       holder_count: { type: Sequelize.INTEGER },
+      icon: { type: Sequelize.STRING },
       created_at: { type: Sequelize.DATE },
       updated_at: { type: Sequelize.DATE },
     }, {
