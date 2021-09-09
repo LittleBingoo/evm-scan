@@ -4,6 +4,7 @@ const Block = DB.Block;
 const Log = DB.Log;
 const TokenTransfer = DB.TokenTransfer;
 const Token = DB.Token;
+const setting = require('../../setting');
 
 async function serialize(transaction, isBrief = false) {
 
@@ -66,7 +67,8 @@ async function serialize(transaction, isBrief = false) {
                     contract_address: tokenTransfer.token_contract_address_hash,
                     name: token?.name,
                     symbol: token?.symbol,
-                    decimals: token?.decimals
+                    decimals: token?.decimals,
+                    icon: token.icon ? setting.TOKEN_ICON_BASE_URL + token.icon : null,
                 }
             });
         }

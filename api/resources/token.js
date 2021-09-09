@@ -8,7 +8,7 @@ async function serialize(token) {
         symbol: token.symbol,
         total_supply: token.total_supply,
         decimals: token.decimals,
-        icon: setting.TOKEN_ICON_BASE_URL + token.icon,
+        icon: token.icon ? setting.TOKEN_ICON_BASE_URL + token.icon : null,
         type: token.type,
     }
 }

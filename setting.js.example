@@ -6,7 +6,10 @@ const setting = {
     MONGODB_DB: 'evm',
 
     // EVM
-    BLOCK_START_AT: 1252435
+    BLOCK_START_AT: 0,
+
+    // ICON
+    TOKEN_ICON_BASE_URL: ''
 }
 
 module.exports = setting;

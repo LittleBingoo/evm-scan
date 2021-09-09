@@ -1,4 +1,5 @@
 const DB = require('../../models/index');
+const setting = require('../../setting');
 const Token = DB.Token;
 const Block = DB.Block;
 
@@ -18,6 +19,7 @@ async function serialize(tokenTransfer) {
             name: token?.name,
             symbol: token?.symbol,
             decimals: token?.decimals,
+            icon: token.icon ? setting.TOKEN_ICON_BASE_URL + token.icon : null,
         },
         block: {
             number: tokenTransfer.block_number,
