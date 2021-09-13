@@ -107,11 +107,11 @@ async function saveInformation(req, res, next) {
     const { decimals } = req.body;
     const { icon } = req.body;
 
-    let token = await Token.findOne({where: {contract_address_hash: contract_address}});
+    let token = await Token.findOne({where: {contract_address_hash: contract_address.toLowerCase()}});
 
     if (token == null) {
         await Token.create({
-            contract_address_hash: contract_address,
+            contract_address_hash: contract_address.toLowerCase(),
             name: name,
             symbol: symbol,
             total_supply: total_supply,
