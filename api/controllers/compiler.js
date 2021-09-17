@@ -5,6 +5,7 @@ const solc = require('solc');
 const Sequelize = require('sequelize');
 const DB = require('../../models/index');
 const SmartContract = DB.SmartContract;
+const Token = DB.Token;
 
 let web3 = new Web3(setting.WEB3_PROVIDER_URL);
 let eth = web3.eth;
@@ -116,6 +117,12 @@ async function index(req, res, next) {
     contract.contract_source_code = data.sourceCode;
     contract.abi = data.abi;
     contract.save();
+
+    // if token
+    let token = await Token.findOne({where: {contract_address_hash: contract.address_hash}});
+    if (token && token.verified != true) {
+        token.verified = true;
+    }
 
     res.json({
         code: 0,

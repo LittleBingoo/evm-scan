@@ -256,6 +256,12 @@ function uniqueArray(arr){
                                     try {
                                         let tokenData = await contractProcessor.erc20CompatibleTest(web3Contract);
                                         if (token == null) {
+                                            // verified
+                                            let smartContract = await SmartContract.findOne({where: {address_hash: contractAddress}});
+                                            let verified = false;
+                                            if (smartContract && smartContract.compiler_version) {
+                                                verified = true;
+                                            }
                                             await Token.create({
                                                 contract_address_hash: contractAddress,
                                                 name: tokenData.name,
@@ -263,6 +269,7 @@ function uniqueArray(arr){
                                                 total_supply: tokenData.totalSupply,
                                                 decimals: tokenData.decimals,
                                                 cataloged: 1,
+                                                verified: verified
                                             }, {transaction: t});
                                         } else {
                                             token.name = tokenData.name;
@@ -305,6 +312,16 @@ function uniqueArray(arr){
                                     console.log(error);
                                 }
                             }
+
+
+                            // token holder count
+                            if (token) {
+                                let count = AddressTokenBalance.count({ where: {token_contract_address_hash: contractAddress}});
+                                token.holder_count = count;
+                                await token.save({transaction: t});
+                            }
+
+
                         }
 
                         // erc20 trace

@@ -19,6 +19,8 @@ async function serialize(token) {
         type: token.type,
         creator: transaction ? transaction.from_address_hash : '',
         created_transaction_hash: transaction ? transaction.hash : '',
+        official: token.official,
+        verified: token.verified
     }
 }
 

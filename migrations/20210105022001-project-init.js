@@ -196,6 +196,7 @@ module.exports = {
       holder_count: { type: Sequelize.INTEGER },
       icon: { type: Sequelize.STRING },
       official: {type: Sequelize.BOOLEAN},
+      verified: {type: Sequelize.BOOLEAN},
       created_at: { type: Sequelize.DATE },
       updated_at: { type: Sequelize.DATE },
     }, {

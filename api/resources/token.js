@@ -4,16 +4,6 @@ const SmartContract = DB.SmartContract;
 
 async function serialize(token) {
 
-    // verified contract
-    let contract = await SmartContract.findOne({
-        where: {address_hash: token.contract_address_hash}
-    });
-
-    let verified = false;
-    if (contract && contract.compiler_version) {
-        verified = true;
-    }
-
     return {
         contract_address: token.contract_address_hash,
         name: token.name,
@@ -23,7 +13,7 @@ async function serialize(token) {
         icon: token.icon ? setting.TOKEN_ICON_BASE_URL + token.icon : null,
         type: token.type,
         official: token.official,
-        verified: verified
+        verified: token.verified
     }
 }
 
