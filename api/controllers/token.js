@@ -16,7 +16,7 @@ async function index(req, res, next) {
 
     let condition = {
         where: {cataloged: true},
-        order: [['holder_count', order], ['official', 'DESC'], ['verified', 'DESC'], ['created_at', 'DESC']],
+        order: [['official', 'DESC'], ['holder_count', order], ['verified', 'DESC'], ['created_at', 'DESC']],
         offset: offset ? offset : 0,
         limit: limit && limit <= 50 ? limit : 50
     }
