@@ -74,6 +74,8 @@ function uniqueArray(arr){
                         let updatedAddresses = [];
                         let createdContracts = [];
                         let updatedAddressTokens = [];
+                        let updatedAddressErc721Tokens = [];
+                        let updatedAddressErc20Tokens = [];
 
                         updatedAddresses.push(block.miner.toLowerCase());
 
@@ -175,6 +177,12 @@ function uniqueArray(arr){
 
                                             if (!updatedAddressTokens[log.address.toLowerCase()]) {
                                                 updatedAddressTokens[log.address.toLowerCase()] = [];
+                                                // ERC721
+                                                if (log.topics[3]) {
+                                                    updatedAddressErc721Tokens.push(log.address.toLowerCase());
+                                                } else {
+                                                    updatedAddressErc20Tokens.push(log.address.toLowerCase());
+                                                }
                                             }
                                             updatedAddressTokens[log.address.toLowerCase()].push(from.toLowerCase());
                                             updatedAddressTokens[log.address.toLowerCase()].push(to.toLowerCase());
@@ -213,7 +221,7 @@ function uniqueArray(arr){
                         createdContracts = uniqueArray(createdContracts)
 
                         for (let contractAddress of createdContracts) {
-                            let smartContract = await Token.findOne({where: {contract_address_hash: contractAddress}});
+                            let smartContract = await SmartContract.findOne({where: {address_hash: contractAddress}});
                             if (smartContract == null) {
                                 let smartContract = await SmartContract.create({
                                     address_hash: contractAddress
@@ -296,6 +304,24 @@ function uniqueArray(arr){
                                 } catch(error) {
                                     console.log(error);
                                 }
+                            }
+                        }
+
+                        // erc20 trace
+                        for (let contractAddress in updatedAddressErc20Tokens) {
+                            let token = await Token.findOne({where: {contract_address_hash: contractAddress}});
+                            if (token != null && token.type == null) {
+                                token.type = 'ERC20';
+                                await token.save({transaction: t});
+                            }
+                        }
+
+                        // erc721 trace
+                        for (let contractAddress in updatedAddressErc721Tokens) {
+                            let token = await Token.findOne({where: {contract_address_hash: contractAddress}});
+                            if (token != null && token.type == null) {
+                                token.type = 'ERC721';
+                                await token.save({transaction: t});
                             }
                         }
 
