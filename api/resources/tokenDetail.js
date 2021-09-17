@@ -15,6 +15,7 @@ async function serialize(token) {
         symbol: token.symbol,
         total_supply: token.total_supply,
         decimals: token.decimals,
+        holder_count: token.holder_count,
         icon: token.icon ? setting.TOKEN_ICON_BASE_URL + token.icon : null,
         type: token.type,
         creator: transaction ? transaction.from_address_hash : '',
