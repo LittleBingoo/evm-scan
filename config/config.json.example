@@ -4,20 +4,23 @@
     "password": "",
     "database": "evmscan",
     "host": "127.0.0.1",
-    "dialect": "postgresql"
+    "dialect": "postgresql",
+    "port": 5432
   },
   "test": {
     "username": "littlebingoo",
     "password": "",
     "database": "evmscan",
     "host": "127.0.0.1",
-    "dialect": "postgresql"
+    "dialect": "postgresql",
+    "port": 5432
   },
   "production": {
     "username": "littlebingoo",
     "password": "",
     "database": "evmscan",
     "host": "127.0.0.1",
-    "dialect": "postgresql"
+    "dialect": "postgresql",
+    "port": 5432
   }
 }
