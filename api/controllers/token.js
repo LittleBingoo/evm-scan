@@ -1,3 +1,4 @@
+const setting = require('../../setting');
 const Sequelize = require('sequelize');
 const DB = require('../../models/index');
 const Token = DB.Token;
@@ -16,7 +17,7 @@ async function index(req, res, next) {
 
     let condition = {
         where: {cataloged: true},
-        order: [['official', 'DESC'], ['verified', 'ASC'], ['holder_count', order], ['created_at', 'DESC']],
+        order: [['official', 'ASC'], ['verified', 'ASC'], ['holder_count', order], ['created_at', 'DESC']],
         offset: offset ? offset : 0,
         limit: limit && limit <= 50 ? limit : 50
     }
@@ -136,9 +137,59 @@ async function saveInformation(req, res, next) {
 }
 
 
+async function tokenList(req, res, next) {
+    const limit = parseInt(req.query.limit);
+    const orderby = parseInt(req.query.orderby);
+
+    let order = 'DESC'
+    if (orderby == 1) {
+        order = 'ASC'
+    }
+
+    let condition = {
+        where: {cataloged: true, official: true},
+        order: [['verified', 'ASC'], ['holder_count', order], ['created_at', 'DESC']],
+        limit: limit && limit <= 200 ? limit : 200
+    }
+
+
+    const tokens = await Token.findAll(condition);
+
+    let data = [];
+
+    for (let token of tokens) {
+        let tokenData = {
+            chainId: setting.CHAIN_ID,
+            address: token.contract_address_hash,
+            name: token.name,
+            symbol: token.symbol,
+            decimals: token.decimals,
+            logoURI: setting.TOKEN_ICON_BASE_URL + token.icon,
+        }
+        data.push(tokenData);
+    }
+
+    res.json({
+        name: setting.CHAIN_NAME,
+        logoURI: setting.CHAIN_LOGO,
+        keywords: [
+            setting.CHAIN_NAME
+        ],
+        timestamp: new Date(),
+        version: {
+            major: 1,
+            minor: 1,
+            patch: 0
+        },
+        tokens: data,
+    });
+}
+
+
 module.exports = {
     index,
     getByContract,
     search,
-    saveInformation
+    saveInformation,
+    tokenList
 }

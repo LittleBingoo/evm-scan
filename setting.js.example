@@ -7,6 +7,10 @@ const setting = {
 
     // EVM
     BLOCK_START_AT: 0,
+    CHAIN_ID: 1,
+
+    CHAIN_NAME: "Ethereum",
+    CHAIN_LOGO: "https://",
 
     // ICON
     TOKEN_ICON_BASE_URL: ''

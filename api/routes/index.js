@@ -29,6 +29,7 @@ router.get('/token/:contract', TokenController.getByContract);
 router.get('/tokens/', TokenController.index);
 router.get('/tokens/search/:keyword', TokenController.search);
 router.post('/tokens/save_information', TokenController.saveInformation);
+router.get('/tokens/tokenlist', TokenController.tokenList);
 
 
 const TokenTransferController = require('../controllers/tokenTransfer.js');
