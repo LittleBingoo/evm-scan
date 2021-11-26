@@ -163,7 +163,7 @@ async function tokenList(req, res, next) {
             address: token.contract_address_hash,
             name: token.name,
             symbol: token.symbol,
-            decimals: token.decimals,
+            decimals: parseInt(token.decimals),
             logoURI: setting.TOKEN_ICON_BASE_URL + token.icon,
         }
         data.push(tokenData);
